@@ -7,6 +7,3 @@ pydantic
 bcrypt
 python-jose[cryptography]
 httpx
-pandas
-scikit-learn
-numpy
