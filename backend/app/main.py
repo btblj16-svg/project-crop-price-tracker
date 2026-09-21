@@ -35,6 +35,7 @@ def on_startup():
     except Exception as e:
         print(f"Startup DB init warning: {e}")
 
+@app.get("/api")
 @app.get("/")
 async def root():
     return {
@@ -43,7 +44,9 @@ async def root():
         "health": "/health"
     }
 
+@app.get("/api/health")
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
+
 

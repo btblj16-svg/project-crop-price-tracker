@@ -69,19 +69,18 @@ def seed_database():
             market_instances.append(market)
         db.commit()
 
-        print("Seeding historical AGMARKNET prices (last 60 days)...")
+        print("Seeding historical AGMARKNET prices (last 10 days)...")
         today = date.today()
         varieties = ["FAQ", "Special", "Hybrid", "Local Desi", "Ponni"]
+        prices_to_add = []
 
         for crop, base_price in crop_instances:
             for market in market_instances:
-                # Slight market deviation factor
                 market_factor = 1.0 + (random.uniform(-0.08, 0.08))
                 cur_price = base_price * market_factor
 
-                for day_offset in range(60, 0, -1):
+                for day_offset in range(10, 0, -1):
                     record_date = today - timedelta(days=day_offset)
-                    # Random daily walk with trend
                     variation = random.uniform(-0.03, 0.035)
                     cur_price = round(max(cur_price * (1.0 + variation), base_price * 0.6), 2)
 
@@ -90,7 +89,7 @@ def seed_database():
                     modal_p = cur_price
                     arrival_qty = round(random.uniform(50.0, 450.0), 1)
 
-                    db.add(CropPrice(
+                    prices_to_add.append(CropPrice(
                         crop_id=crop.id,
                         market_id=market.id,
                         date=record_date,
@@ -100,22 +99,25 @@ def seed_database():
                         modal_price=modal_p,
                         arrival_quantity=arrival_qty
                     ))
+        db.bulk_save_objects(prices_to_add)
         db.commit()
 
         print("Seeding weather records...")
+        weather_to_add = []
         for market in market_instances:
-            for day_offset in range(30, 0, -1):
+            for day_offset in range(7, 0, -1):
                 rec_date = today - timedelta(days=day_offset)
                 temp = round(random.uniform(26.5, 36.5), 1)
                 humidity = round(random.uniform(55.0, 85.0), 1)
                 rainfall = round(random.choice([0.0, 0.0, 0.0, 1.5, 4.2, 12.0]), 1)
-                db.add(Weather(
+                weather_to_add.append(Weather(
                     market_id=market.id,
                     date=rec_date,
                     temperature=temp,
                     humidity=humidity,
                     rainfall=rainfall
                 ))
+        db.bulk_save_objects(weather_to_add)
         db.commit()
 
         print("Seeding ML price predictions (Linear Regression, Random Forest, XGBoost, LSTM)...")

@@ -3,12 +3,10 @@ uvicorn[standard]
 python-dotenv
 sqlalchemy
 alembic
-psycopg2-binary
 pydantic
-passlib[bcrypt]
+bcrypt
 python-jose[cryptography]
 httpx
 pandas
 scikit-learn
 numpy
-

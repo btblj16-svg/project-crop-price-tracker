@@ -1,9 +1,6 @@
 [project]
 name = "project-crop-price-tracker"
 version = "0.1.0"
-description = "Real-Time Crop Price Tracker API"
+description = "Real-Time Crop Price Tracker"
 readme = "README.md"
 requires-python = ">=3.9"
-
-[tool.vercel]
-entrypoint = "backend.app.main:app"
