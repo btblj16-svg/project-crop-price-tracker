@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npm --prefix frontend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": ".venv\\Scripts\\python.exe -m uvicorn backend.app.main:app --reload --port 8000",
     "build": "npm --prefix frontend install && npm --prefix frontend run build"
   }
 }

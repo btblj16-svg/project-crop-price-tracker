@@ -44,7 +44,7 @@ const App: React.FC = () => {
   }, [user]);
 
   const handleLoginSuccess = (userData: any, _token: string) => {
-    const fullUser = { id: 1, ...userData };
+    const fullUser = { ...userData, id: userData.id || 1 };
     setUser(fullUser);
     localStorage.setItem('farmer_user', JSON.stringify(fullUser));
     setActiveTab('dashboard');

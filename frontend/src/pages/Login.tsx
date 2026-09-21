@@ -21,9 +21,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess, onNavigateRegister }) => 
     setError(null);
     try {
       const resp = await api.post('/login', { email, password });
-      const { access_token } = resp.data;
+      const { access_token, user: loggedInUser } = resp.data;
       localStorage.setItem('farmer_token', access_token);
-      onLoginSuccess({ email, full_name: 'Selvam (விவசாயி)' }, access_token);
+      onLoginSuccess(loggedInUser || { id: 1, email, full_name: 'Selvam (விவசாயி)' }, access_token);
     } catch (err: any) {
       console.error(err);
       setError(t('login_failed') || 'Invalid email or password');

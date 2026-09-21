@@ -1,3 +1,4 @@
+from datetime import date
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from .. import db
@@ -12,7 +13,9 @@ async def list_alerts(user_id: int, db: Session = Depends(db.get_db)):
 
 @router.post("/alerts", response_model=PriceAlertResponse, status_code=status.HTTP_201_CREATED)
 async def create_alert(alert: PriceAlertCreate, db: Session = Depends(db.get_db)):
-    db_alert = PriceAlert(**alert.dict())
+    data = alert.model_dump()
+    data.setdefault("created_at", date.today())
+    db_alert = PriceAlert(**data)
     db.add(db_alert)
     db.commit()
     db.refresh(db_alert)

@@ -12,7 +12,7 @@ async def get_weather(db: Session = Depends(db.get_db)):
 
 @router.post("/weather", response_model=WeatherResponse, status_code=status.HTTP_201_CREATED)
 async def add_weather(entry: WeatherCreate, db: Session = Depends(db.get_db)):
-    db_entry = Weather(**entry.dict())
+    db_entry = Weather(**entry.model_dump())
     db.add(db_entry)
     db.commit()
     db.refresh(db_entry)
