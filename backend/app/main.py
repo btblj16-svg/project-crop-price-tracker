@@ -1,0 +1,32 @@
+import os
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+# Import routers (they will be created subsequently)
+from .routes import auth, crops, markets, prices, predictions, weather, alerts, dashboard
+
+app = FastAPI(title="Real-Time Crop Price Tracker API", version="0.1.0")
+
+# CORS configuration - allow all origins for development; restrict in production
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers with common prefix
+app.include_router(auth.router, prefix="/api", tags=["auth"])
+app.include_router(crops.router, prefix="/api", tags=["crops"])
+app.include_router(markets.router, prefix="/api", tags=["markets"])
+app.include_router(prices.router, prefix="/api", tags=["prices"])
+app.include_router(predictions.router, prefix="/api", tags=["predictions"])
+app.include_router(weather.router, prefix="/api", tags=["weather"])
+app.include_router(alerts.router, prefix="/api", tags=["alerts"])
+app.include_router(dashboard.router, prefix="/api", tags=["dashboard"])
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
