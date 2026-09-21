@@ -9,11 +9,12 @@ interface StatsOverviewProps {
 
 const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
   const { t } = useTranslation();
+  const safeStats = stats || ({} as Partial<DashboardStats>);
 
   const cards = [
     {
       title: t('total_tracked_crops'),
-      value: stats.total_crops || 10,
+      value: safeStats.total_crops ?? 10,
       icon: Sprout,
       color: 'from-emerald-600/30 to-emerald-900/30',
       border: 'border-emerald-500/30',
@@ -22,7 +23,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
     },
     {
       title: t('total_mandis'),
-      value: stats.total_markets || 10,
+      value: safeStats.total_markets ?? 10,
       icon: Store,
       color: 'from-teal-600/30 to-teal-900/30',
       border: 'border-teal-500/30',
@@ -31,7 +32,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
     },
     {
       title: t('avg_modal_rate'),
-      value: `₹${stats.average_modal_price?.toLocaleString() || '3,450'}`,
+      value: `₹${safeStats.average_modal_price ? safeStats.average_modal_price.toLocaleString() : '3,450'}`,
       icon: IndianRupee,
       color: 'from-amber-600/30 to-amber-900/30',
       border: 'border-amber-500/30',
@@ -40,7 +41,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
     },
     {
       title: t('active_price_alerts'),
-      value: stats.active_alerts_count || 2,
+      value: safeStats.active_alerts_count ?? 2,
       icon: BellRing,
       color: 'from-blue-600/30 to-blue-900/30',
       border: 'border-blue-500/30',

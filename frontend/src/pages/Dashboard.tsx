@@ -168,7 +168,16 @@ const Dashboard: React.FC<DashboardProps> = ({ activeTab, crops, markets }) => {
       </div>
 
       {/* KPI Stats Overview */}
-      {dashboardData && <StatsOverview stats={dashboardData.stats} />}
+      <StatsOverview
+        stats={
+          dashboardData?.stats || {
+            total_crops: 10,
+            total_markets: 10,
+            average_modal_price: 3450,
+            active_alerts_count: 2,
+          }
+        }
+      />
 
       {/* Tab Conditional Rendering */}
       {activeTab === 'dashboard' && (

@@ -20,9 +20,32 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
+_initialized = False
+
+def init_db():
+    global _initialized
+    if _initialized:
+        return
+    try:
+        from . import models  # Register all models with Base.metadata
+        Base.metadata.create_all(bind=engine)
+        db = SessionLocal()
+        try:
+            from .models.crop import Crop
+            if not db.query(Crop).first():
+                from .seed import seed_database
+                seed_database()
+        finally:
+            db.close()
+        _initialized = True
+    except Exception as e:
+        print(f"init_db warning: {e}")
+
 def get_db():
+    init_db()
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
